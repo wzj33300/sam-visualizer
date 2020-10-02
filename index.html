@@ -10,16 +10,18 @@
 <style>
 </style>
 <body>
-    <div class="ui main container" style="width: 100%">
-    <div class="ui left aligned container" style="width: 100%">
+    <div class="ui main container" style="margin-top: 70px;">
+    <div class="ui center aligned container" style="width: 100%;">
+    <div class="ui form">
     <div class="ui segment stacked">
 	<input id="input" placeholder="Strings seperated by vertical bar (|)"/>
-	<br>
 	<button onclick="visualize()" class="ui submit button">Visualize</button>
-	<button onclick="rawDot()" class="ui submit button">Raw Dot</button>
-	<br>
-	<div id="container"></div>
+	<button onclick="rawDot()" class="ui submit basic button">Raw Dot</button>
     </div>
+    </div>
+    </div>
+    <div class="ui center aligned container" style="width: 100%;">
+	<div id="container" class="ui form"></div>
     </div>
     </div>
 </body>
