@@ -147,7 +147,7 @@
 	function rawDot() {
         document.getElementById('container').style.display = "";
 		var element = document.createElement("textarea");
-        element.readonly = "readonly";
+        element.readOnly = "readonly";
 		element.value = buildSAM(input.value.split("|")).toDot();
 		element.style.width = "500px";
 		element.style.height = "500px";
