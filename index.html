@@ -3,16 +3,21 @@
 	<title>SAM Visualizer</title>
 	<meta charset="UTF-8">
 	<script src="./viz.js"></script>
+    <script src="//cdn.staticfile.org/jquery/3.3.1/jquery.min.js"></script>
+    <script src="//cdn.staticfile.org/semantic-ui/2.3.3/semantic.min.js"></script>
+    <link href="//cdn.staticfile.org/semantic-ui/2.3.3/semantic.min.css" rel="stylesheet">
 </head>
 <style>
 </style>
 <body>
+    <div class="ui segment stacked">
 	<input id="input" placeholder="Strings seperated by vertical bar (|)"/>
 	<br>
-	<button onclick="visualize()">Visualize</button>
-	<button onclick="rawDot()">Raw Dot</button>
+	<button onclick="visualize()" class="ui submit button">Visualize</button>
+	<button onclick="rawDot()" class="ui submit button">Raw Dot</button>
 	<br>
 	<div id="container"></div>
+    </div>
 </body>
 <script>
 	var workerURL = "./lite.render.js";
