@@ -24,7 +24,7 @@
     </div>
     <div class="ui center aligned container" style="width: 100%; margin-top: 35px;">
     <div class="ui form">
-	<div id="container" class="ui segment stacked"></div>
+	<div id="container" class="ui segment stacked" style="display: none;"></div>
     </div>
     </div>
     </div>
@@ -135,6 +135,7 @@
 	}
 
 	function visualize() {
+        document.getElementById('container').style.display = "";
 		viz.renderSVGElement(buildSAM(input.value.split("|")).toDot())
 			.then(function(element) { setContent(element); })
 			.catch(error => {
@@ -144,10 +145,13 @@
 	}
 
 	function rawDot() {
+        document.getElementById('container').style.display = "";
 		var element = document.createElement("textarea");
+        element.readonly = "readonly";
 		element.value = buildSAM(input.value.split("|")).toDot();
 		element.style.width = "500px";
 		element.style.height = "500px";
+		element.style.fontFamily = "monospace";
 		setContent(element);
 	}
 </script>
