@@ -88,7 +88,6 @@
 		for (var i = 1; i <= this.counter; ++i) ++sum[this.len[i]];
 		for (var i = 1; i <= n; ++i) sum[i] += sum[i - 1];
 		for (var i = 1; i <= this.counter; ++i) arr[sum[this.len[i]]--] = i;
-		console.log(arr, this.counter);
 		for (var i = this.counter; i > 1; --i) {
 			var x = arr[i];
 			this.cnt[this.pre[x]] += this.cnt[x];
