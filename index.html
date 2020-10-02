@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<head>
+	<title>SAM Visualizer</title>
+	<meta charset="UTF-8">
+	<script src="./viz.js"></script>
+</head>
+<style>
+</style>
+<body>
+	<input id="input" placeholder="Strings seperated with vertical bar (|)"/>
+	<br>
+	<button onclick="visualize()">Visualize</button>
+	<br>
+	<div id="container"></div>
+</body>
+<script>
+	var workerURL = "./lite.render.js";
+	var viz = new Viz({ workerURL });
+
+	function SAM() {
+		this.counter = 0;
+		this.son = [ null ];
+		this.len = [ null ];
+		this.pre = [ null ];
+		this.cnt = [ null ];
+		this.last = this.create(0);
+	}
+	SAM.prototype.create = function(len) {
+		var x = ++this.counter;
+		this.son.push({});
+		this.len.push(len);
+		this.pre.push(null);
+		this.cnt.push(0);
+		return x;
+	};
+	SAM.prototype.extend = function(c) {
+		var son = this.son, len = this.len, pre = this.pre;
+
+		var i = this.last;
+		var dup = !!son[i][c];
+		this.last = dup? son[i][c]: this.create(len[i] + 1);
+		while (!son[i][c]) {
+			son[i][c] = this.last;
+			if (!(i = pre[i])) {
+				pre[this.last] = 1;
+				return;
+			}
+		}
+		var o = son[i][c];
+		if (len[i] + 1 == len[o]) {
+			if (dup) this.last = o;
+			else pre[this.last] = o;
+			return;
+		}
+		var s = this.create(len[i] + 1);
+		son[s] = Object.assign({}, son[o]);
+		pre[s] = pre[o];
+		pre[o] = s;
+		if (dup) this.last = s;
+		else pre[this.last] = s;
+		do {
+			son[i][c] = s;
+			i = pre[i];
+		} while (i && son[i][c] == o);
+	};
+	SAM.prototype.finalize = function() {
+		var n = this.len[1];
+		for (var i = 2; i <= this.counter; ++i)
+			if (this.len[i] > n) n = this.len[i];
+		var sum = Array(n + 1).fill(0);
+		var arr = Array(this.counter + 1);
+		for (var i = 1; i <= this.counter; ++i) ++sum[this.len[i]];
+		for (var i = 1; i <= n; ++i) sum[i] += sum[i - 1];
+		for (var i = 1; i <= this.counter; ++i) arr[sum[this.len[i]]--] = i;
+		console.log(arr, this.counter);
+		for (var i = this.counter; i > 1; --i) {
+			var x = arr[i];
+			this.cnt[this.pre[x]] += this.cnt[x];
+		}
+	};
+	SAM.prototype.toDot = function() {
+		var str =
+			"digraph {\n" +
+			"  1 [color=red];\n";
+		for (var i = 1; i <= this.counter; ++i) {
+			str += "  " + i + " [label=\"" + i + "\\nlength=" + this.len[i];
+			if (i != 1) str += "\\ncount=" + this.cnt[i];
+			str += "\"];\n";
+			if (this.pre[i])
+				str += "  " + i + " -> " + this.pre[i] + " [color=blue];\n";
+			for (var key in this.son[i])
+				str += "  " + i + " -> " + this.son[i][key] + " [label=\"" + key + "\"];\n";
+		}
+		str += "}";
+		return str;
+	};
+
+	function buildSAM(arr) {
+		var sam = new SAM();
+		for (var i = 0; i < arr.length; ++i) {
+			var str = arr[i];
+			sam.last = 1;
+			for (var j = 0; j < str.length; ++j) {
+				sam.extend(str[j]);
+				++sam.cnt[sam.last];
+			}
+		}
+		sam.finalize();
+		return sam;
+	}
+
+	var input = document.getElementById("input");
+	var container = document.getElementById("container");
+
+	function visualize() {
+		viz.renderSVGElement(buildSAM(input.value.split("|")).toDot())
+			.then(function(element) {
+				var old = container.children[0];
+				if (old) old.remove();
+				container.appendChild(element);
+			})
+			.catch(error => {
+				viz = new Viz({ workerURL });
+				alert("Error occurred while rendering: " + String(error));
+			});
+	}
+</script>
