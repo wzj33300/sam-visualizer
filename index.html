@@ -3,31 +3,31 @@
 	<title>SAM Visualizer</title>
 	<meta charset="UTF-8">
 	<script src="./viz.js"></script>
-    <script src="//cdn.staticfile.org/jquery/3.3.1/jquery.min.js"></script>
-    <script src="//cdn.staticfile.org/semantic-ui/2.3.3/semantic.min.js"></script>
-    <link href="//cdn.staticfile.org/semantic-ui/2.3.3/semantic.min.css" rel="stylesheet">
+	<script src="//cdn.staticfile.org/jquery/3.3.1/jquery.min.js"></script>
+	<script src="//cdn.staticfile.org/semantic-ui/2.3.3/semantic.min.js"></script>
+	<link href="//cdn.staticfile.org/semantic-ui/2.3.3/semantic.min.css" rel="stylesheet">
 </head>
 <style>
 </style>
 <body>
-    <div class="ui main container" style="margin-top: 70px;">
-    <div class="ui center aligned container" style="width: 100%;">
-    <div class="ui form">
-    <div class="ui segment stacked">
+	<div class="ui main container" style="margin-top: 70px; margin-bottom: 70px;">
+	<div class="ui center aligned container" style="width: 100%;">
+	<div class="ui form">
+	<div class="ui segment stacked">
 	<input id="input" placeholder="Strings seperated by vertical bar (|)"/>
-    <div style="margin-top: 10px;">
+	<div style="margin-top: 10px;">
 	<button onclick="visualize()" class="ui submit button">Visualize</button>
 	<button onclick="rawDot()" class="ui submit basic button">Raw Dot</button>
-    </div>
-    </div>
-    </div>
-    </div>
-    <div class="ui center aligned container" style="width: 100%; margin-top: 35px;">
-    <div class="ui form">
+	</div>
+	</div>
+	</div>
+	</div>
+	<div class="ui center aligned container" style="width: 100%; margin-top: 35px;">
+	<div class="ui form">
 	<div id="container" class="ui segment stacked" style="display: none;"></div>
-    </div>
-    </div>
-    </div>
+	</div>
+	</div>
+	</div>
 </body>
 <script>
 	var workerURL = "./lite.render.js";
@@ -135,7 +135,7 @@
 	}
 
 	function visualize() {
-        document.getElementById('container').style.display = "";
+		document.getElementById('container').style.display = "";
 		viz.renderSVGElement(buildSAM(input.value.split("|")).toDot())
 			.then(function(element) { setContent(element); })
 			.catch(error => {
@@ -145,9 +145,9 @@
 	}
 
 	function rawDot() {
-        document.getElementById('container').style.display = "";
+		document.getElementById('container').style.display = "";
 		var element = document.createElement("textarea");
-        element.readOnly = "readonly";
+		element.readOnly = "readonly";
 		element.value = buildSAM(input.value.split("|")).toDot();
 		element.style.width = "500px";
 		element.style.height = "500px";
