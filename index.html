@@ -10,6 +10,7 @@
 	<input id="input" placeholder="Strings seperated with vertical bar (|)"/>
 	<br>
 	<button onclick="visualize()">Visualize</button>
+	<button onclick="rawDot()">Raw Dot</button>
 	<br>
 	<div id="container"></div>
 </body>
@@ -112,16 +113,26 @@
 	var input = document.getElementById("input");
 	var container = document.getElementById("container");
 
+	function setContent(element) {
+		var old = container.children[0];
+		if (old) old.remove();
+		container.appendChild(element);
+	}
+
 	function visualize() {
 		viz.renderSVGElement(buildSAM(input.value.split("|")).toDot())
-			.then(function(element) {
-				var old = container.children[0];
-				if (old) old.remove();
-				container.appendChild(element);
-			})
+			.then(function(element) { setContent(element); })
 			.catch(error => {
 				viz = new Viz({ workerURL });
 				alert("Error occurred while rendering: " + String(error));
 			});
+	}
+
+	function rawDot() {
+		var element = document.createElement("textarea");
+		element.value = buildSAM(input.value.split("|")).toDot();
+		element.style.width = "500px";
+		element.style.height = "500px";
+		setContent(element);
 	}
 </script>
