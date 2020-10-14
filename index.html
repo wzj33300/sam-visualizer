@@ -18,6 +18,7 @@
 	<div style="margin-top: 10px;">
 	<button onclick="visualize()" class="ui submit button">Visualize</button>
 	<button onclick="rawDot()" class="ui submit basic button">Raw Dot</button>
+	<button onclick="countDistinctSubstrings()" class="ui submit basic button">Count Distinct Substrings</button>
 	</div>
 	</div>
 	</div>
@@ -109,6 +110,11 @@
 		str += "}";
 		return str;
 	};
+	SAM.prototype.count = function() {
+		var ret = 0;
+		for (var i = 2; i <= this.counter; ++i) ret += this.len[i] - this.len[this.pre[i]];
+		return ret;
+	};
 
 	function buildSAM(arr) {
 		var sam = new SAM();
@@ -133,9 +139,11 @@
 		container.appendChild(element);
 	}
 
+	function get() { return buildSAM(input.value.split("|")); }
+
 	function visualize() {
 		document.getElementById('container').style.display = "";
-		viz.renderSVGElement(buildSAM(input.value.split("|")).toDot())
+		viz.renderSVGElement(get().toDot())
 			.then(function(element) { setContent(element); })
 			.catch(error => {
 				viz = new Viz({ workerURL });
@@ -147,10 +155,12 @@
 		document.getElementById('container').style.display = "";
 		var element = document.createElement("textarea");
 		element.readOnly = "readonly";
-		element.value = buildSAM(input.value.split("|")).toDot();
+		element.value = get().toDot();
 		element.style.width = "500px";
 		element.style.height = "500px";
 		element.style.fontFamily = "monospace";
 		setContent(element);
 	}
+
+	function countDistinctSubstrings() { alert("Number of distinct substrings: " + get().count()); }
 </script>
